@@ -14,11 +14,14 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
+
       - name: Build and Test
         run: |
-          # Запускаем SUT в фоновом режиме
+          # Шаг 1: Запускаем приложение в фоновом режиме
           java -jar artifacts/app-ibank-build-for-testers.jar &
-          # Ждем, пока приложение запустится
+
+          # Шаг 2: Ждем несколько секунд, чтобы приложение успело запуститься
           sleep 10
-          # Запускаем тесты
+
+          # Шаг 3: Запускаем тесты, когда приложение уже работает
           mvn test
