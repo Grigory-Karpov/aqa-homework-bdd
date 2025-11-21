@@ -1,4 +1,4 @@
-name: Java CI with Maven (with Debugging)
+name: Java CI with Maven (Final Fix)
 
 on: [push, pull_request]
 
@@ -15,27 +15,22 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build and Test with Diagnostics
+      - name: Run SUT, Diagnostics and Tests
         run: |
           echo "--- 1. Checking project structure ---"
           ls -R
 
           echo "--- 2. Starting application in background ---"
-          # Запускаем SUT в фоновом режиме
           java -jar artifacts/app-ibank-build-for-testers.jar &
 
           echo "--- 3. Waiting for application to start (15 seconds) ---"
-          # Ждем 15 секунд
           sleep 15
 
           echo "--- 4. Checking for active Java processes ---"
-          # jps покажет все запущенные java-процессы
           jps -l
 
           echo "--- 5. Checking for listeners on port 9999 ---"
-          # netstat покажет, слушается ли порт 9999. Если нет, мы увидим сообщение.
           netstat -tuln | grep 9999 || echo "!!! PORT 9999 IS NOT OPEN !!!"
 
           echo "--- 6. Running tests ---"
-          # Запускаем тесты
           mvn test
