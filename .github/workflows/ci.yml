@@ -1,4 +1,4 @@
-name: Java CI with Maven (Direct Edit)
+name: Java CI with Maven (Download SUT)
 
 on: [push, pull_request]
 
@@ -15,22 +15,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run SUT, Diagnostics and Tests
+      - name: Download and Run SUT, then Test
         run: |
-          echo "--- 1. Checking project structure ---"
-          ls -R
+          echo "--- 1. Downloading SUT ---"
+          # Скачиваем файл из надежного источника (официальный репозиторий Нетологии)
+          wget -O app-ibank.jar https://github.com/netology-code/java-qa-homeworks/raw/master/artifacts/app-ibank-build-for-testers.jar
 
           echo "--- 2. Starting application in background ---"
-          java -jar artifacts/app-ibank-build-for-testers.jar &
+          java -jar app-ibank.jar &
 
-          echo "--- 3. Waiting for application to start (15 seconds) ---"
-          sleep 15
+          echo "--- 3. Waiting for application to start (20 seconds) ---"
+          # Дадим ему побольше времени на всякий случай
+          sleep 20
 
-          echo "--- 4. Checking for active Java processes ---"
-          jps
-
-          echo "--- 5. Checking for listeners on port 9999 ---"
+          echo "--- 4. Checking for listeners on port 9999 ---"
           netstat -tuln | grep 9999 || echo "!!! PORT 9999 IS NOT OPEN !!!"
 
-          echo "--- 6. Running tests ---"
+          echo "--- 5. Running tests ---"
           mvn --no-transfer-progress test
