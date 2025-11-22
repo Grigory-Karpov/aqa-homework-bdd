@@ -1,0 +1,36 @@
+name: Java CI Test Runner
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run SUT, Diagnostics, and Tests
+        run: |
+          echo "--- Verifying file exists ---"
+          ls -l artifacts/
+          
+          echo "--- Starting SUT ---"
+          java -jar artifacts/app-ibank-build-for-testers.jar &
+          sleep 20
+          
+          echo "--- Verifying port is open ---"
+          netstat -tuln | grep 9999 || echo "PORT 9999 IS NOT OPEN"
+          
+          echo "--- Running tests ---"
+          mvn test
