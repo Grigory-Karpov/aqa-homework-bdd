@@ -1,4 +1,4 @@
-name: Java CI with Maven (Fresh Start)
+name: Java CI with Maven (Correct URL)
 
 on: [push, pull_request]
 
@@ -17,8 +17,9 @@ jobs:
 
       - name: Download SUT, Run, and Test
         run: |
-          echo "--- STEP 1: DOWNLOADING SUT FROM NETOLOGY REPO ---"
-          wget -O app-ibank.jar https://github.com/netology-code/java-qa-homeworks/raw/master/artifacts/app-ibank-build-for-testers.jar
+          echo "--- STEP 1: DOWNLOADING SUT FROM CORRECT REPO ---"
+          # ИСПРАВЛЕННАЯ ССЫЛКА
+          wget -O app-ibank.jar https://github.com/netology-code/aqa-homeworks/raw/master/bdd/artifacts/app-ibank-build-for-testers.jar
 
           echo "--- STEP 2: STARTING SUT IN BACKGROUND ---"
           java -jar app-ibank.jar &
