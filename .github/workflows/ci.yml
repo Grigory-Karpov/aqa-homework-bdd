@@ -1,4 +1,4 @@
-name: Java CI with Maven (Final Fix)
+name: Java CI with Maven (Direct Edit)
 
 on: [push, pull_request]
 
@@ -27,10 +27,10 @@ jobs:
           sleep 15
 
           echo "--- 4. Checking for active Java processes ---"
-          jps -l
+          jps
 
           echo "--- 5. Checking for listeners on port 9999 ---"
           netstat -tuln | grep 9999 || echo "!!! PORT 9999 IS NOT OPEN !!!"
 
           echo "--- 6. Running tests ---"
-          mvn test
+          mvn --no-transfer-progress test
